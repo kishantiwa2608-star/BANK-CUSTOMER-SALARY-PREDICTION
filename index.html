@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI Deep Learning Bank Customer Salary Prediction Application powered by ANN model and Scikit-Learn.">
+  <title>Customer Salary Prediction | Deep Learning Banking Analytics</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <div class="app-title">
+          <h1>Bank Customer Salary Predictor</h1>
+          <p>Deep Learning ANN Intelligence & Predictive Analytics</p>
+        </div>
+      </div>
+      <div class="status-badge" id="liveStatusBadge">
+        <span class="pulse-dot"></span> Model Live & Active
+      </div>
+    </header>
+
+    <!-- Main Dashboard Grid -->
+    <main class="dashboard-grid">
+
+      <!-- Left Column: Input Form -->
+      <section class="card" aria-label="Customer Input Form">
+        <h2 class="card-title">
+          <i class="fa-solid fa-sliders"></i> Customer Demographic & Financial Input
+        </h2>
+
+        <form id="predictionForm" onsubmit="event.preventDefault();">
+          <div class="form-grid">
+
+            <!-- Geography -->
+            <div class="form-group">
+              <label for="geography">Geography / Region</label>
+              <select id="geography" name="geography">
+                <option value="France">France 🇫🇷</option>
+                <option value="Spain">Spain 🇪🇸</option>
+                <option value="Germany">Germany 🇩🇪</option>
+              </select>
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+              <label>Gender</label>
+              <div class="toggle-group" id="genderGroup">
+                <button type="button" class="toggle-btn active" data-value="Female">Female</button>
+                <button type="button" class="toggle-btn" data-value="Male">Male</button>
+              </div>
+            </div>
+
+            <!-- Age Slider -->
+            <div class="form-group full-width">
+              <label for="age">
+                <span>Age</span>
+                <span class="value-tag" id="ageVal">30 yrs</span>
+              </label>
+              <input type="range" id="age" name="age" min="18" max="92" value="30">
+            </div>
+
+            <!-- Balance -->
+            <div class="form-group">
+              <label for="balance">Account Balance ($)</label>
+              <input type="number" id="balance" name="balance" min="0" step="1000" value="50000">
+            </div>
+
+            <!-- Credit Score -->
+            <div class="form-group">
+              <label for="creditScore">
+                <span>Credit Score</span>
+                <span class="value-tag" id="creditRating">Good</span>
+              </label>
+              <input type="range" id="creditScore" name="creditScore" min="300" max="850" step="5" value="650">
+              <div style="font-size:0.75rem; text-align:right; color:var(--text-muted); margin-top:2px;">
+                Score: <span id="creditScoreVal" style="color:var(--accent-cyan); font-weight:700;">650</span>
+              </div>
+            </div>
+
+            <!-- Tenure -->
+            <div class="form-group">
+              <label for="tenure">
+                <span>Tenure</span>
+                <span class="value-tag" id="tenureVal">1 yrs</span>
+              </label>
+              <input type="range" id="tenure" name="tenure" min="0" max="10" value="1">
+            </div>
+
+            <!-- Num Of Products -->
+            <div class="form-group">
+              <label for="numOfProducts">
+                <span>Products Used</span>
+                <span class="value-tag" id="numOfProductsVal">2</span>
+              </label>
+              <input type="range" id="numOfProducts" name="numOfProducts" min="1" max="4" value="2">
+            </div>
+
+            <!-- Credit Card -->
+            <div class="form-group">
+              <label>Has Credit Card</label>
+              <div class="toggle-group" id="crCardGroup">
+                <button type="button" class="toggle-btn" data-value="0">No</button>
+                <button type="button" class="toggle-btn active" data-value="1">Yes</button>
+              </div>
+            </div>
+
+            <!-- Active Member -->
+            <div class="form-group">
+              <label>Active Banking Member</label>
+              <div class="toggle-group" id="activeGroup">
+                <button type="button" class="toggle-btn" data-value="0">No</button>
+                <button type="button" class="toggle-btn active" data-value="1">Yes</button>
+              </div>
+            </div>
+
+            <!-- Exited Status -->
+            <div class="form-group full-width">
+              <label>Retention Status</label>
+              <div class="toggle-group" id="exitedGroup">
+                <button type="button" class="toggle-btn active" data-value="0">Retained Member (Active)</button>
+                <button type="button" class="toggle-btn" data-value="1">Churned Member (Exited)</button>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </section>
+
+      <!-- Right Column: Results & Analytics -->
+      <section class="card results-card" aria-label="Prediction Results">
+        <h2 class="card-title">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Predicted Annual Salary
+        </h2>
+
+        <div class="hero-prediction">
+          <div class="prediction-label">Estimated Annual Earnings</div>
+          <div class="prediction-value" id="predictedSalaryVal">$0.00</div>
+          <div class="prediction-subtext">Calculated via Regression ANN & Feature Weighting Matrix</div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-item">
+            <div class="stat-val" id="monthlySalaryVal">$0</div>
+            <div class="stat-lbl">Est. Monthly</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-val" id="dailyRateVal">$0</div>
+            <div class="stat-lbl">Est. Daily Rate</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-val" id="tierVal">Silver</div>
+            <div class="stat-lbl">Customer Tier</div>
+          </div>
+        </div>
+
+        <!-- Factor Impact Breakdown -->
+        <div>
+          <div class="breakdown-title">Primary Feature Driver Weights</div>
+          
+          <div class="factor-item">
+            <div class="factor-info">
+              <span>Customer Age & Experience</span>
+              <span style="color:var(--accent-cyan);">Age Factor</span>
+            </div>
+            <div class="factor-bar-bg">
+              <div class="factor-bar-fill fill-cyan" id="ageBarFill" style="width: 40%;"></div>
+            </div>
+          </div>
+
+          <div class="factor-item">
+            <div class="factor-info">
+              <span>Account Equity & Savings</span>
+              <span style="color:var(--accent-purple);">Balance Factor</span>
+            </div>
+            <div class="factor-bar-bg">
+              <div class="factor-bar-fill fill-purple" id="balanceBarFill" style="width: 50%;"></div>
+            </div>
+          </div>
+
+          <div class="factor-item">
+            <div class="factor-info">
+              <span>Credit Score Benchmark</span>
+              <span style="color:var(--accent-amber);">Credit Factor</span>
+            </div>
+            <div class="factor-bar-bg">
+              <div class="factor-bar-fill fill-amber" id="creditBarFill" style="width: 65%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer Persona Card -->
+        <div class="persona-badge">
+          <div class="persona-icon">💼</div>
+          <div class="persona-details">
+            <h4 id="personaTitle">Core Banking Client</h4>
+            <p id="personaDesc">Customer profile demonstrates standard risk & income parameters.</p>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <p>Bank Customer Salary Prediction Model • Powered by Python, Streamlit & Artificial Neural Networks</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
